@@ -1,24 +1,30 @@
 const metadataExtract = require("metadata-extract");
-
 const router = require("express").Router();
 
-router.post('/', async (req, res) => {
-    if (req.files) {
-        console.log(req.files);
-        const metadata = await metadataExtract(req.files.file.name);
-        const fileInfo = {
-            "File name": req.files.file.name,
-            "File size": `${req.files.file.size} bytes`,
-            "File type": req.files.file.mimetype,
-            "File Extension": metadata.extension,
-            "Temporary file path": req.files.file.tempFilePath,
-            "File encoding": req.files.file.encoding,
-            "MD5 (message-digest algorithm)": req.files.file.md5
-        }
-        res.json(fileInfo);
-        // const {data, ...others} = req.files.file;
-        // res.json(others)
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/data/uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
     }
 })
+
+
+//using multer to upload files
+const upload = multer({ storage: storage })
+
+// const upload = multer({ dest: './public/data/uploads/', preservePath: true })
+router.post('/', upload.single('uploaded_file'), async (req, res) => {
+    // req.file is the name of your file in the form above, here 'uploaded_file'
+    // req.body will hold the text fields, if there were any 
+    // console.log(req.file, req.body)
+    console.log(req.file);
+    const metadata = await metadataExtract(req.file.path);
+    res.json(metadata);
+});
+
 
 module.exports = router;
