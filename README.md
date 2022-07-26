@@ -1,4 +1,4 @@
-This is now working with multer used for the file uploading and metadata-extract for the extraction of the meta data.
+This is now working with multer used for the file uploading and metadata-extract and piexifjs for the extraction of the meta data.
 
 use npm i before running the app.
 
