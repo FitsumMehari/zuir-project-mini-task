@@ -32,7 +32,7 @@ router.post('/', upload.single('uploaded_file'), async (req, res) => {
         const getBase64DataFromJpegFile = filename => fs.readFileSync(filename).toString('binary');
         const getExifFromJpegFile = filename => piexif.load(getBase64DataFromJpegFile(filename));
 
-        const exifData = await getExifFromJpegFile(req.file.path);
+        const exifData = getExifFromJpegFile(req.file.path);
 
         const metadata = debugExif(exifData);
         const finalMetadata = { ...metadatasmall, ...metadata }
