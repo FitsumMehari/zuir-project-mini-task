@@ -21,3 +21,6 @@ app.listen(PORT, () => {
     console.log(`Server up and running on PORT: ${PORT}`);
 });
 
+// For  Vercel to turn Express into a serverless function
+
+module.exports = app;
